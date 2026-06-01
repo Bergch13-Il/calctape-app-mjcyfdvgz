@@ -1,6 +1,7 @@
-import { Menu, Undo2, Redo2, MoreVertical } from 'lucide-react'
+import { Undo2, Redo2, MoreVertical } from 'lucide-react'
 import { useCalc } from '@/hooks/use-calc'
 import { Button } from '@/components/ui/button'
+import { MainMenu } from '@/components/navigation/MainMenu'
 
 export function Header() {
   const { undo, redo, canUndo, canRedo } = useCalc()
@@ -8,9 +9,7 @@ export function Header() {
   return (
     <div className="h-14 bg-tape-header flex items-center justify-between px-2 shadow-md z-10 shrink-0">
       <div className="flex items-center gap-2">
-        <Button variant="ghost" size="icon" className="text-white hover:bg-white/10 shrink-0">
-          <Menu className="h-6 w-6" />
-        </Button>
+        <MainMenu triggerClassName="text-white hover:bg-white/10 shrink-0" />
         <div className="text-white text-xl font-medium truncate select-none">Scratchpad</div>
       </div>
 

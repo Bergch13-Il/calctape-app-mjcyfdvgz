@@ -6,6 +6,10 @@ import Index from './pages/Index'
 import NotFound from './pages/NotFound'
 import Layout from './components/Layout'
 
+import SimplePercentagePage from './pages/SimplePercentage'
+import DiscountPage from './pages/Discount'
+import PercentageVariationPage from './pages/PercentageVariation'
+
 const App = () => (
   <BrowserRouter future={{ v7_startTransition: false, v7_relativeSplatPath: false }}>
     <TooltipProvider>
@@ -14,6 +18,9 @@ const App = () => (
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<Index />} />
+          <Route path="/simple-percentage" element={<SimplePercentagePage />} />
+          <Route path="/discount" element={<DiscountPage />} />
+          <Route path="/percentage-variation" element={<PercentageVariationPage />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
