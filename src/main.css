@@ -30,6 +30,15 @@
 }
 
 @layer utilities {
+  .no-stepper::-webkit-outer-spin-button,
+  .no-stepper::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .no-stepper {
+    -moz-appearance: textfield;
+  }
+
   .tape-paper {
     background-color: #fffde7;
     background-image: repeating-linear-gradient(

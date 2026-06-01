@@ -7,9 +7,20 @@ interface ToolRowProps {
   suffix?: string
   readOnly?: boolean
   className?: string
+  onFocus?: () => void
+  onBlur?: () => void
 }
 
-export function ToolRow({ label, value, onChange, suffix, readOnly, className }: ToolRowProps) {
+export function ToolRow({
+  label,
+  value,
+  onChange,
+  suffix,
+  readOnly,
+  className,
+  onFocus,
+  onBlur,
+}: ToolRowProps) {
   return (
     <div className={cn('flex items-center min-h-[56px] w-full gap-4', className)}>
       {label && (
@@ -25,13 +36,20 @@ export function ToolRow({ label, value, onChange, suffix, readOnly, className }:
         )}
       >
         <input
-          type="number"
-          step="any"
+          type="text"
+          inputMode="none"
           value={value}
-          onChange={(e) => onChange?.(e.target.value)}
+          onChange={(e) => {
+            const val = e.target.value.replace(/,/g, '.')
+            if (/^-?\d*\.?\d*$/.test(val)) {
+              onChange?.(val)
+            }
+          }}
+          onFocus={onFocus}
+          onBlur={onBlur}
           readOnly={readOnly}
           className={cn(
-            'w-full h-full bg-transparent border-none text-white text-right outline-none text-[17px] font-medium placeholder:text-white/40',
+            'w-full h-full bg-transparent border-none text-white text-right outline-none text-[17px] font-medium placeholder:text-white/40 no-stepper',
             suffix ? 'pr-9 pl-4' : 'px-4',
             readOnly && 'cursor-default',
           )}
