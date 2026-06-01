@@ -10,7 +10,9 @@ export function Header() {
     <div className="h-14 bg-tape-header flex items-center justify-between px-2 shadow-md z-10 shrink-0">
       <div className="flex items-center gap-2">
         <MainMenu triggerClassName="text-white hover:bg-white/10 shrink-0" />
-        <div className="text-white text-xl font-medium truncate select-none">Scratchpad</div>
+        <div className="text-white text-xl font-medium truncate select-none">
+          Calc com anotações
+        </div>
       </div>
 
       <div className="flex items-center gap-1">
