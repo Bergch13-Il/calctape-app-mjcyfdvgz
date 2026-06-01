@@ -6,7 +6,7 @@ import { ToolKeypad } from '@/components/percentage-tools/ToolKeypad'
 export default function PercentageVariationPage() {
   const [initial, setInitial] = useState<string>('')
   const [final, setFinal] = useState<string>('')
-  const [activeField, setActiveField] = useState<'initial' | 'final' | null>(null)
+  const [activeField, setActiveField] = useState<'initial' | 'final'>('initial')
 
   const i = parseFloat(initial) || 0
   const f = parseFloat(final) || 0
@@ -19,7 +19,7 @@ export default function PercentageVariationPage() {
   const handleReset = () => {
     setInitial('')
     setFinal('')
-    setActiveField(null)
+    setActiveField('initial')
   }
 
   const handleKeyPress = (key: string) => {
@@ -36,12 +36,6 @@ export default function PercentageVariationPage() {
     if (activeField === 'final') setFinal((prev) => prev.slice(0, -1))
   }
 
-  const handleBlur = (field: 'initial' | 'final') => {
-    setTimeout(() => {
-      setActiveField((current) => (current === field ? null : current))
-    }, 100)
-  }
-
   const displayVariation =
     initial !== '' && final !== ''
       ? Number.isInteger(variation)
@@ -53,25 +47,21 @@ export default function PercentageVariationPage() {
     <ToolLayout
       title="Aumento/redução de porcentagem"
       onReset={handleReset}
-      keypad={
-        activeField ? <ToolKeypad onKeyPress={handleKeyPress} onDelete={handleDelete} /> : null
-      }
+      keypad={<ToolKeypad onKeyPress={handleKeyPress} onDelete={handleDelete} />}
     >
-      <div className="flex flex-col gap-5 pt-2">
+      <div className="flex flex-col gap-4 pt-4">
         <ToolRow
           label="Valor Inic..."
           value={initial}
-          onChange={setInitial}
-          onFocus={() => setActiveField('initial')}
-          onBlur={() => handleBlur('initial')}
+          isActive={activeField === 'initial'}
+          onClick={() => setActiveField('initial')}
           suffix="€"
         />
         <ToolRow
           label="Valor Final"
           value={final}
-          onChange={setFinal}
-          onFocus={() => setActiveField('final')}
-          onBlur={() => handleBlur('final')}
+          isActive={activeField === 'final'}
+          onClick={() => setActiveField('final')}
           suffix="€"
         />
         <ToolRow label="Variação %" value={displayVariation} readOnly suffix="%" />

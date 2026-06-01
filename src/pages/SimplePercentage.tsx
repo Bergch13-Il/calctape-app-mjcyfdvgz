@@ -6,7 +6,7 @@ import { ToolKeypad } from '@/components/percentage-tools/ToolKeypad'
 export default function SimplePercentagePage() {
   const [percentage, setPercentage] = useState<string>('')
   const [baseValue, setBaseValue] = useState<string>('')
-  const [activeField, setActiveField] = useState<'percentage' | 'base' | null>(null)
+  const [activeField, setActiveField] = useState<'percentage' | 'base'>('percentage')
 
   const p = parseFloat(percentage) || 0
   const b = parseFloat(baseValue) || 0
@@ -15,7 +15,7 @@ export default function SimplePercentagePage() {
   const handleReset = () => {
     setPercentage('')
     setBaseValue('')
-    setActiveField(null)
+    setActiveField('percentage')
   }
 
   const handleKeyPress = (key: string) => {
@@ -32,12 +32,6 @@ export default function SimplePercentagePage() {
     if (activeField === 'base') setBaseValue((prev) => prev.slice(0, -1))
   }
 
-  const handleBlur = (field: 'percentage' | 'base') => {
-    setTimeout(() => {
-      setActiveField((current) => (current === field ? null : current))
-    }, 100)
-  }
-
   const displayResult =
     percentage !== '' && baseValue !== ''
       ? Number.isInteger(result)
@@ -49,24 +43,20 @@ export default function SimplePercentagePage() {
     <ToolLayout
       title="Porcentagens simples"
       onReset={handleReset}
-      keypad={
-        activeField ? <ToolKeypad onKeyPress={handleKeyPress} onDelete={handleDelete} /> : null
-      }
+      keypad={<ToolKeypad onKeyPress={handleKeyPress} onDelete={handleDelete} />}
     >
-      <div className="flex flex-col gap-5 pt-2">
+      <div className="flex flex-col gap-4 pt-4">
         <ToolRow
           value={percentage}
-          onChange={setPercentage}
-          onFocus={() => setActiveField('percentage')}
-          onBlur={() => handleBlur('percentage')}
+          isActive={activeField === 'percentage'}
+          onClick={() => setActiveField('percentage')}
           suffix="%"
         />
         <ToolRow
           label="de"
           value={baseValue}
-          onChange={setBaseValue}
-          onFocus={() => setActiveField('base')}
-          onBlur={() => handleBlur('base')}
+          isActive={activeField === 'base'}
+          onClick={() => setActiveField('base')}
         />
         <ToolRow label="é" value={displayResult} readOnly />
       </div>

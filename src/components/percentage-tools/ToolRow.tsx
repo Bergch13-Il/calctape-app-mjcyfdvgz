@@ -3,60 +3,50 @@ import { cn } from '@/lib/utils'
 interface ToolRowProps {
   label?: string
   value: string
-  onChange?: (val: string) => void
   suffix?: string
   readOnly?: boolean
   className?: string
-  onFocus?: () => void
-  onBlur?: () => void
+  isActive?: boolean
+  onClick?: () => void
 }
 
 export function ToolRow({
   label,
   value,
-  onChange,
   suffix,
   readOnly,
   className,
-  onFocus,
-  onBlur,
+  isActive,
+  onClick,
 }: ToolRowProps) {
   return (
     <div className={cn('flex items-center min-h-[56px] w-full gap-4', className)}>
       {label && (
-        <div className="text-white font-medium w-24 shrink-0 text-[15px] truncate select-none">
+        <div className="text-white font-medium w-20 shrink-0 text-[16px] truncate select-none pl-1">
           {label}
         </div>
       )}
       <div
+        onClick={!readOnly ? onClick : undefined}
         className={cn(
-          'relative flex-1 h-12 bg-white/20 rounded-xl overflow-hidden transition-all',
-          !readOnly && 'focus-within:ring-2 focus-within:ring-white/50 focus-within:bg-white/30',
-          readOnly && 'bg-white/10',
+          'relative flex-1 h-[52px] bg-white/10 rounded-lg overflow-hidden transition-all border border-white/10',
+          isActive && 'ring-2 ring-white/50 bg-white/20 border-transparent',
+          !isActive && !readOnly && 'hover:bg-white/20 cursor-pointer',
+          readOnly && 'bg-white/5 opacity-80 cursor-default',
         )}
       >
         <input
           type="text"
-          inputMode="none"
+          readOnly
           value={value}
-          onChange={(e) => {
-            const val = e.target.value.replace(/,/g, '.')
-            if (/^-?\d*\.?\d*$/.test(val)) {
-              onChange?.(val)
-            }
-          }}
-          onFocus={onFocus}
-          onBlur={onBlur}
-          readOnly={readOnly}
           className={cn(
-            'w-full h-full bg-transparent border-none text-white text-right outline-none text-[17px] font-medium placeholder:text-white/40 no-stepper',
-            suffix ? 'pr-9 pl-4' : 'px-4',
-            readOnly && 'cursor-default',
+            'w-full h-full bg-transparent border-none text-white text-right outline-none text-[18px] font-medium placeholder:text-white/60 no-stepper cursor-pointer pointer-events-none',
+            suffix ? 'pr-10 pl-4' : 'px-4',
           )}
           placeholder="0"
         />
         {suffix && (
-          <div className="absolute right-3 top-0 h-full flex items-center justify-end text-white/80 pointer-events-none text-[17px] font-medium select-none">
+          <div className="absolute right-4 top-0 h-full flex items-center justify-end text-white font-medium pointer-events-none text-[16px] select-none">
             {suffix}
           </div>
         )}

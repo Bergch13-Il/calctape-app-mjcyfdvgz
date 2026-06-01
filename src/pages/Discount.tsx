@@ -6,7 +6,7 @@ import { ToolKeypad } from '@/components/percentage-tools/ToolKeypad'
 export default function DiscountPage() {
   const [before, setBefore] = useState<string>('')
   const [discount, setDiscount] = useState<string>('')
-  const [activeField, setActiveField] = useState<'before' | 'discount' | null>(null)
+  const [activeField, setActiveField] = useState<'before' | 'discount'>('before')
 
   const b = parseFloat(before) || 0
   const d = parseFloat(discount) || 0
@@ -17,7 +17,7 @@ export default function DiscountPage() {
   const handleReset = () => {
     setBefore('')
     setDiscount('')
-    setActiveField(null)
+    setActiveField('before')
   }
 
   const handleKeyPress = (key: string) => {
@@ -32,12 +32,6 @@ export default function DiscountPage() {
   const handleDelete = () => {
     if (activeField === 'before') setBefore((prev) => prev.slice(0, -1))
     if (activeField === 'discount') setDiscount((prev) => prev.slice(0, -1))
-  }
-
-  const handleBlur = (field: 'before' | 'discount') => {
-    setTimeout(() => {
-      setActiveField((current) => (current === field ? null : current))
-    }, 100)
   }
 
   const displayAfter =
@@ -58,25 +52,21 @@ export default function DiscountPage() {
     <ToolLayout
       title="Desconto"
       onReset={handleReset}
-      keypad={
-        activeField ? <ToolKeypad onKeyPress={handleKeyPress} onDelete={handleDelete} /> : null
-      }
+      keypad={<ToolKeypad onKeyPress={handleKeyPress} onDelete={handleDelete} />}
     >
-      <div className="flex flex-col gap-5 pt-2">
+      <div className="flex flex-col gap-4 pt-4">
         <ToolRow
           label="Antes"
           value={before}
-          onChange={setBefore}
-          onFocus={() => setActiveField('before')}
-          onBlur={() => handleBlur('before')}
+          isActive={activeField === 'before'}
+          onClick={() => setActiveField('before')}
           suffix="€"
         />
         <ToolRow
           label="Desconto"
           value={discount}
-          onChange={setDiscount}
-          onFocus={() => setActiveField('discount')}
-          onBlur={() => handleBlur('discount')}
+          isActive={activeField === 'discount'}
+          onClick={() => setActiveField('discount')}
           suffix="%"
         />
         <ToolRow label="Depois" value={displayAfter} readOnly suffix="€" />
