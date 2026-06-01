@@ -1,11 +1,16 @@
-/* Home Page - Replace this page layout, components, content, behavior with what you want and translate to the language of the user */
+import { CalcProvider } from '@/hooks/use-calc'
+import { CalculatorLayout } from '@/components/calculator/Layout'
+
 const Index = () => {
   return (
-    <div className="container mx-auto py-8 px-4">
-      <h1 className="text-3xl font-bold mb-6">
-        This is a example page ready to be rewritten with your own content
-      </h1>
-    </div>
+    <CalcProvider>
+      <div className="bg-black min-h-screen w-full flex items-center justify-center">
+        {/* Responsive wrapper to limit width on desktop, full screen on mobile */}
+        <div className="w-full max-w-md h-screen md:h-[850px] md:max-h-[95vh] md:rounded-3xl overflow-hidden shadow-2xl relative border border-white/10">
+          <CalculatorLayout />
+        </div>
+      </div>
+    </CalcProvider>
   )
 }
 
