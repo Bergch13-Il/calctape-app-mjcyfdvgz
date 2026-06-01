@@ -7,7 +7,7 @@ export function Keypad() {
     useCalc()
 
   return (
-    <div className="grid grid-cols-4 grid-rows-5 gap-[1px] bg-tape-keypadBg p-[1px] h-full min-h-[40vh] select-none">
+    <div className="grid grid-cols-4 grid-rows-5 gap-[1px] bg-[#263238] p-[1px] h-full min-h-[40vh] select-none">
       {/* Row 1 */}
       <Key variant="ac" onClick={clearAll} className="text-xl font-bold text-white">
         AC
@@ -70,16 +70,16 @@ function Key({
   onClick?: () => void
 }) {
   const bgClass = {
-    num: 'bg-tape-keyNum hover:bg-[#B0BEC5]',
-    op: 'bg-tape-keyOp hover:bg-[#78909C]',
-    ac: 'bg-tape-keyAc hover:bg-[#BF360C]',
+    num: 'bg-[#cfd8dc] hover:bg-[#b0bec5] text-black',
+    op: 'bg-[#90a4ae] hover:bg-[#78909c] text-black',
+    ac: 'bg-[#e64a19] hover:bg-[#bf360c] text-white',
   }[variant]
 
   return (
     <button
       onClick={onClick}
       className={cn(
-        'flex items-center justify-center text-3xl font-medium text-black transition-colors active:scale-95 duration-75 origin-center focus:outline-none',
+        'flex items-center justify-center text-3xl font-medium transition-colors active:scale-95 duration-75 origin-center focus:outline-none',
         bgClass,
         className,
       )}

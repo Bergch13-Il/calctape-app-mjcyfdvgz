@@ -49,7 +49,7 @@ export function TapeLineUI({ line }: { line: ComputedLine }) {
           className={cn(
             'w-6 text-left shrink-0',
             isResult && 'font-bold',
-            opDisplay === '-' && 'text-tape-neg',
+            opDisplay === '-' && 'text-red-500',
           )}
         >
           {opDisplay}
@@ -60,14 +60,14 @@ export function TapeLineUI({ line }: { line: ComputedLine }) {
           className={cn(
             'w-36 text-right shrink-0 tabular-nums tracking-tight',
             isResult && 'font-bold',
-            (isResult ? line.computedValue < 0 : line.operator === '-') && 'text-tape-neg',
+            (isResult ? line.computedValue < 0 : line.operator === '-') && 'text-red-500',
           )}
         >
           {valDisplay || (isActive ? '' : '0')}
         </div>
 
         {/* Percentage Indicator */}
-        {line.isPercentage && <div className="ml-1 shrink-0 text-tape-comment">%</div>}
+        {line.isPercentage && <div className="ml-1 shrink-0 text-blue-500/80">%</div>}
 
         {/* Double Equal Indicator */}
         {line.type === 'grandtotal' && (
@@ -77,7 +77,7 @@ export function TapeLineUI({ line }: { line: ComputedLine }) {
         )}
 
         {/* Comment */}
-        <div className="flex-1 ml-4 text-tape-comment whitespace-nowrap overflow-hidden text-ellipsis select-text">
+        <div className="flex-1 ml-4 text-blue-500/80 whitespace-nowrap overflow-hidden text-ellipsis select-text">
           {line.comment}
         </div>
       </div>

@@ -18,12 +18,15 @@ export function CalculatorLayout() {
   }, [computedLines.length])
 
   return (
-    <div className="flex flex-col h-screen h-[100dvh] w-full bg-tape-header overflow-hidden">
+    <div className="flex flex-col h-full w-full bg-[#3c3c3c] overflow-hidden">
       <Header />
 
       {/* Tape Area */}
-      <div ref={scrollRef} className="flex-1 overflow-y-auto tape-paper hide-scrollbar">
-        <div className="max-w-2xl mx-auto w-full min-h-full pb-32 pt-4">
+      <div
+        ref={scrollRef}
+        className="flex-1 overflow-y-auto tape-paper hide-scrollbar shadow-inner"
+      >
+        <div className="max-w-2xl mx-auto w-full min-h-full pb-8 pt-4">
           {computedLines.map((line) => (
             <TapeLineUI key={line.id} line={line} />
           ))}

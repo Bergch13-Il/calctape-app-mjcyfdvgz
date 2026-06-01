@@ -24,13 +24,13 @@ export function ControlBar() {
   }
 
   return (
-    <div className="h-12 bg-tape-control flex items-center px-1 shrink-0 border-b border-black/20">
+    <div className="h-12 bg-[#3c3c3c] flex items-center px-1 shrink-0 border-b border-black/20">
       <div className="flex items-center gap-1">
         <ModeTab label="123" active={mode === '123'} onClick={() => setMode('123')} />
         <ModeTab label="321" active={mode === '321'} onClick={() => setMode('321')} />
         <ModeTab label="ABC" active={mode === 'ABC'} onClick={() => setMode('ABC')} />
 
-        <button className="h-full px-3 text-tape-cyan hover:bg-white/5 transition-colors flex items-center justify-center">
+        <button className="h-full px-3 text-[#4dd0e1] hover:bg-white/5 transition-colors flex items-center justify-center">
           <Keyboard className="h-5 w-5" />
         </button>
       </div>
@@ -41,7 +41,7 @@ export function ControlBar() {
 
       <button
         onClick={handleCopy}
-        className="h-full px-3 text-tape-cyan hover:bg-white/5 transition-colors flex items-center justify-center border-l border-white/10"
+        className="h-full px-3 text-[#4dd0e1] hover:bg-white/5 transition-colors flex items-center justify-center border-l border-white/10"
       >
         <Copy className="h-5 w-5" />
       </button>
@@ -64,8 +64,8 @@ function ModeTab({
       className={cn(
         'h-10 px-3 text-sm font-semibold rounded-sm transition-colors mx-0.5',
         active
-          ? 'text-tape-cyan bg-white/10'
-          : 'text-tape-cyan/60 hover:text-tape-cyan hover:bg-white/5',
+          ? 'text-[#4dd0e1] bg-white/10'
+          : 'text-[#4dd0e1]/60 hover:text-[#4dd0e1] hover:bg-white/5',
       )}
     >
       {label}
