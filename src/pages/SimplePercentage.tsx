@@ -3,41 +3,81 @@ import { ToolLayout } from '@/components/percentage-tools/ToolLayout'
 import { ToolRow } from '@/components/percentage-tools/ToolRow'
 import { ToolKeypad } from '@/components/percentage-tools/ToolKeypad'
 
-export default function SimplePercentagePage() {
-  const [percentage, setPercentage] = useState<string>('')
-  const [baseValue, setBaseValue] = useState<string>('')
-  const [activeField, setActiveField] = useState<'percentage' | 'base'>('percentage')
+type Field = 'percentage' | 'base' | 'result'
 
-  const p = parseFloat(percentage) || 0
-  const b = parseFloat(baseValue) || 0
-  const result = (p / 100) * b
+export default function SimplePercentagePage() {
+  const [values, setValues] = useState<Record<Field, string>>({
+    percentage: '',
+    base: '',
+    result: '',
+  })
+  const [activeField, setActiveField] = useState<Field>('percentage')
+  const [fixedField, setFixedField] = useState<Field>('base')
+
+  const handleFocus = (field: Field) => {
+    if (field !== activeField) {
+      setFixedField(activeField)
+      setActiveField(field)
+    }
+  }
 
   const handleReset = () => {
-    setPercentage('')
-    setBaseValue('')
+    setValues({ percentage: '', base: '', result: '' })
     setActiveField('percentage')
+    setFixedField('base')
+  }
+
+  const handleChange = (newVal: string) => {
+    const newValues = { ...values, [activeField]: newVal }
+
+    let currentFixed = fixedField
+    if (newValues[currentFixed] === '') {
+      const other = (['percentage', 'base', 'result'] as Field[]).find(
+        (f) => f !== activeField && f !== currentFixed,
+      )!
+      if (newValues[other] !== '') currentFixed = other
+    }
+
+    const calcField = (['percentage', 'base', 'result'] as Field[]).find(
+      (f) => f !== activeField && f !== currentFixed,
+    )!
+
+    const aNum = parseFloat(newVal)
+    const fNum = parseFloat(newValues[currentFixed])
+
+    if (!isNaN(aNum) && !isNaN(fNum)) {
+      let calcNum = 0
+      const p = activeField === 'percentage' ? aNum : currentFixed === 'percentage' ? fNum : 0
+      const b = activeField === 'base' ? aNum : currentFixed === 'base' ? fNum : 0
+      const r = activeField === 'result' ? aNum : currentFixed === 'result' ? fNum : 0
+
+      if (calcField === 'result') calcNum = (p / 100) * b
+      else if (calcField === 'base') calcNum = p === 0 ? 0 : r / (p / 100)
+      else if (calcField === 'percentage') calcNum = b === 0 ? 0 : (r / b) * 100
+
+      if (isFinite(calcNum)) {
+        const rounded = Math.round(calcNum * 100) / 100
+        newValues[calcField] = Number.isInteger(rounded) ? rounded.toString() : rounded.toFixed(2)
+      } else {
+        newValues[calcField] = ''
+      }
+    } else if (newVal === '') {
+      newValues[calcField] = ''
+    }
+
+    setValues(newValues)
   }
 
   const handleKeyPress = (key: string) => {
-    const update = (prev: string) => {
-      if (key === '.' && prev.includes('.')) return prev
-      return prev + key
-    }
-    if (activeField === 'percentage') setPercentage(update)
-    if (activeField === 'base') setBaseValue(update)
+    const prev = values[activeField]
+    if (key === '.' && prev.includes('.')) return
+    handleChange(prev + key)
   }
 
   const handleDelete = () => {
-    if (activeField === 'percentage') setPercentage((prev) => prev.slice(0, -1))
-    if (activeField === 'base') setBaseValue((prev) => prev.slice(0, -1))
+    const prev = values[activeField]
+    handleChange(prev.slice(0, -1))
   }
-
-  const displayResult =
-    percentage !== '' && baseValue !== ''
-      ? Number.isInteger(result)
-        ? result.toString()
-        : result.toFixed(2)
-      : ''
 
   return (
     <ToolLayout
@@ -47,18 +87,23 @@ export default function SimplePercentagePage() {
     >
       <div className="flex flex-col gap-4 pt-4">
         <ToolRow
-          value={percentage}
+          value={values.percentage}
           isActive={activeField === 'percentage'}
-          onClick={() => setActiveField('percentage')}
+          onClick={() => handleFocus('percentage')}
           suffix="%"
         />
         <ToolRow
           label="de"
-          value={baseValue}
+          value={values.base}
           isActive={activeField === 'base'}
-          onClick={() => setActiveField('base')}
+          onClick={() => handleFocus('base')}
         />
-        <ToolRow label="é" value={displayResult} readOnly />
+        <ToolRow
+          label="é"
+          value={values.result}
+          isActive={activeField === 'result'}
+          onClick={() => handleFocus('result')}
+        />
       </div>
     </ToolLayout>
   )
