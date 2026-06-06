@@ -13,11 +13,13 @@ export default function SimplePercentagePage() {
   })
   const [activeField, setActiveField] = useState<Field>('percentage')
   const [fixedField, setFixedField] = useState<Field>('base')
+  const [calculatedField, setCalculatedField] = useState<Field | null>(null)
 
   const handleFocus = (field: Field) => {
     if (field !== activeField) {
       setFixedField(activeField)
       setActiveField(field)
+      setCalculatedField(null)
     }
   }
 
@@ -25,6 +27,7 @@ export default function SimplePercentagePage() {
     setValues({ percentage: '', base: '', result: '' })
     setActiveField('percentage')
     setFixedField('base')
+    setCalculatedField(null)
   }
 
   const handleChange = (newVal: string) => {
@@ -66,6 +69,7 @@ export default function SimplePercentagePage() {
     }
 
     setValues(newValues)
+    setCalculatedField(newVal === '' ? null : calcField)
   }
 
   const handleKeyPress = (key: string) => {
@@ -89,6 +93,7 @@ export default function SimplePercentagePage() {
         <ToolRow
           value={values.percentage}
           isActive={activeField === 'percentage'}
+          isCalculated={calculatedField === 'percentage'}
           onClick={() => handleFocus('percentage')}
           suffix="%"
         />
@@ -96,12 +101,14 @@ export default function SimplePercentagePage() {
           label="de"
           value={values.base}
           isActive={activeField === 'base'}
+          isCalculated={calculatedField === 'base'}
           onClick={() => handleFocus('base')}
         />
         <ToolRow
           label="é"
           value={values.result}
           isActive={activeField === 'result'}
+          isCalculated={calculatedField === 'result'}
           onClick={() => handleFocus('result')}
         />
       </div>

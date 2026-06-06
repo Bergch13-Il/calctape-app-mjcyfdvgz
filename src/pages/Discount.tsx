@@ -13,11 +13,13 @@ export default function DiscountPage() {
   })
   const [activeField, setActiveField] = useState<Field>('before')
   const [fixedField, setFixedField] = useState<Field>('discount')
+  const [calculatedField, setCalculatedField] = useState<Field | null>(null)
 
   const handleFocus = (field: Field) => {
     if (field !== activeField) {
       setFixedField(activeField)
       setActiveField(field)
+      setCalculatedField(null)
     }
   }
 
@@ -25,6 +27,7 @@ export default function DiscountPage() {
     setValues({ before: '', discount: '', after: '' })
     setActiveField('before')
     setFixedField('discount')
+    setCalculatedField(null)
   }
 
   const handleChange = (newVal: string) => {
@@ -66,6 +69,7 @@ export default function DiscountPage() {
     }
 
     setValues(newValues)
+    setCalculatedField(newVal === '' ? null : calcField)
   }
 
   const handleKeyPress = (key: string) => {
@@ -99,6 +103,7 @@ export default function DiscountPage() {
           label="Antes"
           value={values.before}
           isActive={activeField === 'before'}
+          isCalculated={calculatedField === 'before'}
           onClick={() => handleFocus('before')}
           suffix="€"
         />
@@ -106,6 +111,7 @@ export default function DiscountPage() {
           label="Desconto"
           value={values.discount}
           isActive={activeField === 'discount'}
+          isCalculated={calculatedField === 'discount'}
           onClick={() => handleFocus('discount')}
           suffix="%"
         />
@@ -113,6 +119,7 @@ export default function DiscountPage() {
           label="Depois"
           value={values.after}
           isActive={activeField === 'after'}
+          isCalculated={calculatedField === 'after'}
           onClick={() => handleFocus('after')}
           suffix="€"
         />

@@ -7,6 +7,7 @@ interface ToolRowProps {
   readOnly?: boolean
   className?: string
   isActive?: boolean
+  isCalculated?: boolean
   onClick?: () => void
 }
 
@@ -17,6 +18,7 @@ export function ToolRow({
   readOnly,
   className,
   isActive,
+  isCalculated,
   onClick,
 }: ToolRowProps) {
   return (
@@ -29,10 +31,14 @@ export function ToolRow({
       <div
         onClick={!readOnly ? onClick : undefined}
         className={cn(
-          'relative flex-1 h-[52px] bg-white/10 rounded-lg overflow-hidden transition-all border border-white/10',
+          'relative flex-1 h-[52px] rounded-lg overflow-hidden transition-all border',
           isActive && 'ring-2 ring-white/50 bg-white/20 border-transparent',
-          !isActive && !readOnly && 'hover:bg-white/20 cursor-pointer',
-          readOnly && 'bg-white/5 opacity-80 cursor-default',
+          isCalculated &&
+            !isActive &&
+            'bg-[#4ade80]/20 border-[#4ade80]/50 shadow-[0_0_10px_rgba(74,222,128,0.2)]',
+          !isActive && !isCalculated && 'bg-white/10 border-white/10',
+          !isActive && !readOnly && !isCalculated && 'hover:bg-white/20 cursor-pointer',
+          readOnly && 'bg-white/5 border-white/5 opacity-80 cursor-default',
         )}
       >
         <input
@@ -40,7 +46,8 @@ export function ToolRow({
           readOnly
           value={value}
           className={cn(
-            'w-full h-full bg-transparent border-none text-white text-right outline-none text-[18px] font-medium placeholder:text-white/60 no-stepper cursor-pointer pointer-events-none',
+            'w-full h-full bg-transparent border-none text-white text-right outline-none text-[18px] font-medium placeholder:text-white/60 no-stepper cursor-pointer pointer-events-none transition-colors duration-300',
+            isCalculated && !isActive && 'text-[#bbf7d0]',
             suffix ? 'pr-10 pl-4' : 'px-4',
           )}
           placeholder="0"

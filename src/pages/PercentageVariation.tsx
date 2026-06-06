@@ -13,11 +13,13 @@ export default function PercentageVariationPage() {
   })
   const [activeField, setActiveField] = useState<Field>('initial')
   const [fixedField, setFixedField] = useState<Field>('final')
+  const [calculatedField, setCalculatedField] = useState<Field | null>(null)
 
   const handleFocus = (field: Field) => {
     if (field !== activeField) {
       setFixedField(activeField)
       setActiveField(field)
+      setCalculatedField(null)
     }
   }
 
@@ -25,6 +27,7 @@ export default function PercentageVariationPage() {
     setValues({ initial: '', final: '', variation: '' })
     setActiveField('initial')
     setFixedField('final')
+    setCalculatedField(null)
   }
 
   const handleChange = (newVal: string) => {
@@ -66,6 +69,7 @@ export default function PercentageVariationPage() {
     }
 
     setValues(newValues)
+    setCalculatedField(newVal === '' ? null : calcField)
   }
 
   const handleKeyPress = (key: string) => {
@@ -90,6 +94,7 @@ export default function PercentageVariationPage() {
           label="Valor Inic..."
           value={values.initial}
           isActive={activeField === 'initial'}
+          isCalculated={calculatedField === 'initial'}
           onClick={() => handleFocus('initial')}
           suffix="€"
         />
@@ -97,6 +102,7 @@ export default function PercentageVariationPage() {
           label="Valor Final"
           value={values.final}
           isActive={activeField === 'final'}
+          isCalculated={calculatedField === 'final'}
           onClick={() => handleFocus('final')}
           suffix="€"
         />
@@ -104,6 +110,7 @@ export default function PercentageVariationPage() {
           label="Variação %"
           value={values.variation}
           isActive={activeField === 'variation'}
+          isCalculated={calculatedField === 'variation'}
           onClick={() => handleFocus('variation')}
           suffix="%"
         />
