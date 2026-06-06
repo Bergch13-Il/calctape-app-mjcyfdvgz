@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { Keyboard, Copy } from 'lucide-react'
 import { useCalc } from '@/hooks/use-calc'
 import { cn } from '@/lib/utils'
@@ -5,8 +6,18 @@ import { formatNumStr, generateTapeText } from '@/lib/calc-utils'
 import { useToast } from '@/hooks/use-toast'
 
 export function ControlBar() {
-  const { mode, setMode, computedLines } = useCalc()
+  const {
+    mode,
+    setMode,
+    computedLines,
+    pressNumber,
+    pressOperator,
+    pressEqual,
+    pressPercentage,
+    pressBackspace,
+  } = useCalc()
   const { toast } = useToast()
+  const hiddenInputRef = useRef<HTMLInputElement>(null)
 
   const handleCopy = () => {
     const text = generateTapeText(computedLines)
@@ -24,13 +35,38 @@ export function ControlBar() {
   }
 
   return (
-    <div className="h-12 bg-[#3c3c3c] flex items-center px-1 shrink-0 border-b border-black/20">
+    <div className="h-12 bg-[#3c3c3c] flex items-center px-1 shrink-0 border-b border-black/20 relative">
+      <input
+        ref={hiddenInputRef}
+        type="text"
+        inputMode="decimal"
+        className="absolute opacity-0 pointer-events-none w-0 h-0"
+        value=""
+        onChange={(e) => {
+          const val = e.target.value
+          if (!val) return
+          const char = val[val.length - 1]
+          if (/[0-9.,]/.test(char)) pressNumber(char === ',' ? '.' : char)
+          else if (['+', '-', '*', '/'].includes(char)) pressOperator(char as any)
+          else if (char === '=') pressEqual()
+          else if (char === '%') pressPercentage()
+          e.target.value = ''
+        }}
+        onKeyDown={(e) => {
+          if (e.key === 'Backspace') pressBackspace()
+          else if (e.key === 'Enter') pressEqual()
+        }}
+      />
+
       <div className="flex items-center gap-1">
         <ModeTab label="123" active={mode === '123'} onClick={() => setMode('123')} />
         <ModeTab label="321" active={mode === '321'} onClick={() => setMode('321')} />
         <ModeTab label="ABC" active={mode === 'ABC'} onClick={() => setMode('ABC')} />
 
-        <button className="h-full px-3 text-[#4dd0e1] hover:bg-white/5 transition-colors flex items-center justify-center">
+        <button
+          onClick={() => hiddenInputRef.current?.focus()}
+          className="h-full px-3 text-[#4dd0e1] hover:bg-white/5 transition-colors flex items-center justify-center"
+        >
           <Keyboard className="h-5 w-5" />
         </button>
       </div>
